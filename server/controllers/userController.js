@@ -13,6 +13,7 @@ const generateToken = (userId) => {
 // controller for user registration
 // POST: /api/users/register
 export const registerUser = async (req, res) => {
+    console.log(req.body)
 try {
     const {name, email, password} = req.body
     if(!name || !email || !password) {

@@ -109,13 +109,13 @@ const MinimalImageTemplate = ({ data, accentColor }) => {
                 <main className="col-span-2 p-8 pt-0">
 
                     {/* Summary */}
-                    {data.professional_summary && (
+                    {data.proffessional_summary && (
                         <section className="mb-8">
                             <h2 className="text-sm font-semibold tracking-widest mb-3" style={{ color: accentColor }} >
                                 SUMMARY
                             </h2>
                             <p className="text-zinc-700 leading-relaxed">
-                                {data.professional_summary}
+                                {data.proffessional_summary}
                             </p>
                         </section>
                     )}

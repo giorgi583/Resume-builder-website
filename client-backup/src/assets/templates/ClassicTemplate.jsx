@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Globe } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Globe } from "lucide-react";
 
 const ClassicTemplate = ({ data, accentColor }) => {
     const formatDate = (dateStr) => {
@@ -9,7 +9,6 @@ const ClassicTemplate = ({ data, accentColor }) => {
             month: "short"
         });
     };
-
 
     return (
         <div className="max-w-4xl mx-auto p-8 bg-white text-gray-800 leading-relaxed">
@@ -40,7 +39,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
                     )}
                     {data.personal_info?.linkedin && (
                         <div className="flex items-center gap-1">
-                            <i className="fa-brands fa-linkedin size-4"></i>
+                            <Linkedin className="size-4" />
                             <span className="break-all">{data.personal_info.linkedin}</span>
                         </div>
                     )}
@@ -54,14 +53,14 @@ const ClassicTemplate = ({ data, accentColor }) => {
             </header>
 
             {/* Professional Summary */}
-           
-               {data.professional_summary &&  <section className="mb-6">
+            {data.professional_summary && (
+                <section className="mb-6">
                     <h2 className="text-xl font-semibold mb-3" style={{ color: accentColor }}>
                         PROFESSIONAL SUMMARY
                     </h2>
                     <p className="text-gray-700 leading-relaxed">{data.professional_summary}</p>
                 </section>
-}
+            )}
 
             {/* Experience */}
             {data.experience && data.experience.length > 0 && (
@@ -94,14 +93,14 @@ const ClassicTemplate = ({ data, accentColor }) => {
             )}
 
             {/* Projects */}
-            {data.projects && data.projects.length > 0 && (
+            {data.project && data.project.length > 0 && (
                 <section className="mb-6">
                     <h2 className="text-xl font-semibold mb-4" style={{ color: accentColor }}>
                         PROJECTS
                     </h2>
 
                     <ul className="space-y-3 ">
-                        {data.projects.map((proj, index) => (
+                        {data.project.map((proj, index) => (
                             <div key={index} className="flex justify-between items-start border-l-3 border-gray-300 pl-6">
                                 <div>
                                     <li className="font-semibold text-gray-800 ">{proj.name}</li>

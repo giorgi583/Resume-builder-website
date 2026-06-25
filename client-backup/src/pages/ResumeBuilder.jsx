@@ -2,9 +2,8 @@ import React, { useEffect } from 'react'
 import { dummyResumeData } from '../assets/assets'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeftIcon, Briefcase, Share2Icon, ChevronLeft, ChevronRight, DownloadIcon, Eye, EyeOff, FileText, FolderIcon, GraduationCap, ShareIcon, Sparkles, User } from 'lucide-react'
-import { useSelector } from 'react-redux'
-import api from '../configs/api'
-import { toast } from 'react-hot-toast'
+
+
 // components
 import PersonalInfoForm from '../components/PersonalInfoForm'
 import ResumePreview from '../components/ResumePreview'
@@ -17,12 +16,11 @@ import ProjectForm from '../components/ProjectForm'
 import SkillsForm from '../components/SkillsForm'
 const ResumeBuilder = () => {
 const { resumeId } = useParams()
-const {token} = useSelector((state) => state.auth)
   const [resumeData, setResumeData] = React.useState({
     _id: '',
     title: '',
     personal_info: {},
-    professional_summary: '',
+    proffessional_summary: '',
     experience: [],
     education: [],
     skills: [],
@@ -33,17 +31,12 @@ const {token} = useSelector((state) => state.auth)
   })
   
   const loadExistingResume = async () => {
-try {
-  const {data} = await api.get(`/api/resumes/get/${resumeId}`, {headers: {Authorization: token}})
-  if(data.resume) {
-    setResumeData(data.resume)
-    document.title = data.resume.title
+const resume = dummyResumeData.find(resume => resume._id === resumeId)
+if (resume) {
+  setResumeData(resume)
+  document.title = resume.title;
+}
   }
-} catch (error) {
-  console.log(error.message)
-}
-}
-  
 const [activeSectionIndex, setActiveSectionIndex] = React.useState(0)
 const [removeBackground, setRemoveBackground] = React.useState(false)
   const sections = [
@@ -59,17 +52,8 @@ useEffect(() => {
     loadExistingResume()
  
 }, [])
-const changeResumeVisibility = async () => {
-  try {
-    const formData = new FormData()
-    formData.append('resumeId', resumeId)
-    formData.append('resumeData', JSON.stringify({public: !resumeData.public}))
-     const {data} = await api.put(`/api/resumes/update/`, formData, {headers: {Authorization: token}})
-     setResumeData({...resumeData, public: !resumeData.public })
-     toast.success(data.message)
-  } catch (error) {
-    console.error('error saving resume' + error)
-  }
+const changeResumeVisibility = (async) => {
+  setResumeData({...resumeData, public: !resumeData.public})
 }
 const handleShare = () => {
   const frontendURL = window.location.href.split('/app/')[0]
@@ -86,27 +70,6 @@ const handleShare = () => {
 }
 const downloadResume = () => {
   window.print()
-}
-const saveResume = async () => {
-  try {
-    let updatedResumeData = structuredClone(resumeData)
-const imageFile = updatedResumeData.personal_info.image
-    // remove image from updatedResumeData
-    if(typeof imageFile === 'object' && imageFile !== null) {
-      delete updatedResumeData.personal_info.image
-     }
-    const formData = new FormData()
-    formData.append('resumeId', resumeId)
-    formData.append('resumeData', JSON.stringify(updatedResumeData))
-    console.log(updatedResumeData)
-    removeBackground && formData.append('removeBackground', "yes")
-    if( typeof imageFile === 'object' && imageFile !== null)  formData.append('image', imageFile)
-     const {data} = await api.put(`/api/resumes/update/`, formData, {headers: {Authorization: token}})
-     setResumeData(data.resume)
-     toast.success(data.message)
-  } catch (error) {
-    console.error('error saving resume' + error)
-  }
 }
   return (
     <div>
@@ -142,7 +105,7 @@ const imageFile = updatedResumeData.personal_info.image
     <PersonalInfoForm data={resumeData.personal_info} onChange={(data) => setResumeData(prev => ({...prev, personal_info: data}))} removeBackground={removeBackground} setRemoveBackground={setRemoveBackground}/>
   )}
   {activeSection.id === 'summary' && (
-    <ProffesionalSummaryForm data={resumeData.professional_summary} onChange={(data) => setResumeData(prev => ({...prev, professional_summary: data}))} setResumeData={setResumeData}/>
+    <ProffesionalSummaryForm data={resumeData.proffessional_summary} onChange={(data) => setResumeData(prev => ({...prev, proffessional_summary: data}))} setResumeData={setResumeData}/>
   )}
   {activeSection.id === 'experience' && (
     <ExperienceForm data={resumeData.experience} onChange={(data) => setResumeData(prev => ({...prev, experience: data}))} />
@@ -157,7 +120,7 @@ const imageFile = updatedResumeData.personal_info.image
     <SkillsForm data={resumeData.skills} onChange={(data) => setResumeData(prev => ({...prev, skills: data}))} />
   )}
 </div>
-<button onClick={()=> {toast.promise(saveResume, {loading: 'Saving...'})}} className='bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm'>
+<button className='bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm'>
   Save changes
 </button>
 </div>

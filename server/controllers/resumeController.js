@@ -78,7 +78,13 @@ export const updateResume = async (req, res) => {
       const userId = req.userId;
       const {resumeId, resumeData, removeBackground} = req.body;
       const image = req.file
-      let resumeDataCopy = JSON.parse(resumeData);
+      let resumeDataCopy;
+      if(typeof resumeData === 'string') {
+        resumeDataCopy = await JSON.parse(resumeData);
+      }
+      else {
+        resumeDataCopy = structuredClone(resumeData);
+      }
       if(image) {
 const imageBufferData = fs.createReadStream(image.path);
 
@@ -92,7 +98,7 @@ const imageBufferData = fs.createReadStream(image.path);
 });
 resumeDataCopy.personal_info.image = response.url;
       }
-      const resume = await Resume.findByIdAndUpdate({userId, _id: resumeId}, resumeDataCopy, {new: true});
+      const resume = await Resume.findByIdAndUpdate({userId, _id: resumeId}, resumeDataCopy, {returnDocument: 'after'});
       if(!resume) {
         return res.status(404).json({ message: 'Resume not found' });
       }

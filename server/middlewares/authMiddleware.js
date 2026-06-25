@@ -2,7 +2,11 @@
 import jwt from 'jsonwebtoken';
 
 const protect = async (req, res, next) => {
-const token = req.headers.authorization;
+    console.log(req.headers.authorization);
+let token = req.headers.authorization;
+ if (token.startsWith("Bearer ")) {
+            token = token.slice(7);
+        }
 if(!token) {
     return res.status(401).json({message: 'Not authorized'});
 }
@@ -12,6 +16,7 @@ req.userId = decoded.userId;
 next();
 }
 catch(error) {
+    console.log(error);
     return res.status(401).json({message: 'Not authorized'});
 }
 }

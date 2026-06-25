@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Globe } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Globe } from "lucide-react";
 
 const ModernTemplate = ({ data, accentColor }) => {
 	const formatDate = (dateStr) => {
@@ -38,9 +38,9 @@ const ModernTemplate = ({ data, accentColor }) => {
 						</div>
 					)}
 					{data.personal_info?.linkedin && (
-						<a target="_blank" href={data.personal_info?.Globe} className="flex items-center gap-2">
-							<i className="fa-brands fa-linkedin size-4"></i>
-							<span className="break-all text-xs">{data.personal_info.linkedin.split("https://")[1] ? data.personal_info.linkedin.split("https://")[1] : data.personal_info.linkedin}</span>
+						<a target="_blank" href={data.personal_info?.linkedin} className="flex items-center gap-2">
+							<Linkedin className="size-4" />
+							<span className="break-all text-xs">{data.personal_info.linkedin.split("https://www.")[1] ? data.personal_info.linkedin.split("https://www.")[1] : data.personal_info.linkedin}</span>
 						</a>
 					)}
 					{data.personal_info?.website && (
@@ -95,14 +95,14 @@ const ModernTemplate = ({ data, accentColor }) => {
 				)}
 
 				{/* Projects */}
-				{data.projects && data.projects.length > 0 && (
+				{data.project && data.project.length > 0 && (
 					<section className="mb-8">
 						<h2 className="text-2xl font-light mb-4 pb-2 border-b border-gray-200">
 							Projects
 						</h2>
 
 						<div className="space-y-6">
-							{data.projects.map((p, index) => (
+							{data.project.map((p, index) => (
 								<div key={index} className="relative pl-6 border-l border-gray-200" style={{borderLeftColor: accentColor}}>
 
 

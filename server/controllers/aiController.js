@@ -1,12 +1,14 @@
+import dotenv from 'dotenv'
+dotenv.config({ path: '../.env', quiet: true })
 import Resume from '../models/Resume.js'
 import AI from '../configs/ai.js'
-
 // comtroller fo enhancing resume professional summary
 // POST: /api/ai/enhance-pro-sum
 
 export const enhanceProfessionalSummary = async (req, res) => {
     try {
-const userContent = req.body
+const {userContent} = req.body
+console.log(req.body)
 if(!userContent) {
     return res.status(400).json({message: 'All fields are required'})
 }
@@ -20,6 +22,10 @@ const response = await AI.chat.completions.create({
     const enhancedSummary = response.choices[0].message.content
 res.status(200).json({message: 'Professional summary enhanced successfully', enhancedSummary})}
     catch(error) {
+        console.error("Full error:", error);
+  console.error("Status:", error.status);
+  console.error("Message:", error.message);
+  console.error("Response:", error.response?.data);
         return res.status(500).json({message: error.message})
     }
 }
@@ -51,16 +57,18 @@ res.status(200).json({message: 'Professional summary enhanced successfully', enh
 // controller for uploading resume to the database
 // POST: /api/ai/upload-resume
 export const uploadResume = async (req, res) => {
+    
     try {
         const {resumeText, title} = req.body
         const userId = req.userId
         if(!resumeText) {
             return res.status(400).json({message: 'All fields are required'})
         }
+        console.log("API key exists:", !!process.env.OPENAI_API_KEY);
+console.log("API key prefix:", process.env.OPENAI_API_KEY?.slice(0, 10));
         const systemPrompt = "You are an expert AI agent to extract data from resume"
         const userPrompt = `extract data from this resume: ${resumeText} 
-        Provide data in following json format with no additional text befor or after: 
-
+        Provide data in following json format with no additional text before or after: 
         { 
         professional_summary: {type: String, default: ''},
         skills: [{type: String, default: ''}],
@@ -93,8 +101,9 @@ export const uploadResume = async (req, res) => {
         field: {type: String, default: ''},
         graduation_date: {type: Date, default: new Date()},
         gpa: {type: String, default: ''},
-    }]}
-        `
+    }]}`
+    console.log("System prompt length:", systemPrompt.length);
+console.log("User prompt length:", userPrompt.length);
         const response = await AI.chat.completions.create({
     model: process.env.OPENAI_MODEL,
     messages: [
@@ -103,11 +112,21 @@ export const uploadResume = async (req, res) => {
     ],
     response_format: {type: 'json_object'}
     } )
+    console.log(response)
     const extractedData = response.choices[0].message.content
     const parsedData = JSON.parse(extractedData)
     const resume = await Resume.create({userId, title, ...parsedData})
     res.json({resumeId: resume._id})
     } catch (error) {
-        
+       console.error("Status:", error.status);
+  console.error("Message:", error.message);
+  console.error("Full error:", error);
+
+  throw error;
+
+    if (error.response) {
+        console.log(await error.response.text?.());
+    }
+        return res.status(500).json({message: error.message})
     }
 }

@@ -54,7 +54,7 @@ navigate(`/app/builder/${data.resume._id}`)
       setTitle('')
       setResume(null)
       setShowuploadresume(false)
-      navigate(`/app/builder/${data.resume._id}`)
+      navigate(`/app/builder/${data.resumeId}`)
     }
     catch (error) {
       toast.error(error?.response?.data?.message || error.message)
@@ -151,7 +151,6 @@ navigate(`/app/builder/${data.resume._id}`)
    
   </>  
 ) }
-
                     </div>
                     </label>
                   </div>

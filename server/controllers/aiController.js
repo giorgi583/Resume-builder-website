@@ -20,6 +20,7 @@ const response = await AI.chat.completions.create({
     ]
     } )
     const enhancedSummary = response.choices[0].message.content
+    console.log(enhancedSummary)
 res.status(200).json({message: 'Professional summary enhanced successfully', enhancedSummary})}
     catch(error) {
         console.error("Full error:", error);
@@ -36,7 +37,8 @@ res.status(200).json({message: 'Professional summary enhanced successfully', enh
 
 export const enhanceJobDescription = async (req, res) => {
     try {
-const userContent = req.body
+const {userContent} = req.body
+console.log(userContent)
 if(!userContent) {
     return res.status(400).json({message: 'All fields are required'})
 }
@@ -48,8 +50,10 @@ const response = await AI.chat.completions.create({
     ]
     } )
     const enhancedSummary = response.choices[0].message.content
+    console.log(enhancedSummary)
 res.status(200).json({message: 'Professional summary enhanced successfully', enhancedSummary})}
     catch(error) {
+        console.error("Full error:", error);
         return res.status(500).json({message: error.message})
     }
 }
@@ -115,7 +119,16 @@ console.log("User prompt length:", userPrompt.length);
     console.log(response)
     const extractedData = response.choices[0].message.content
     const parsedData = JSON.parse(extractedData)
+    parsedData.experience = parsedData.experience?.map(exp => ({
+    ...exp,
+    end_date:
+        exp.end_date === "Present" ||
+        exp.end_date === "present"
+            ? null
+            : exp.end_date
+}));
     const resume = await Resume.create({userId, title, ...parsedData})
+    console.log("Created resume:", resume);
     res.json({resumeId: resume._id})
     } catch (error) {
        console.error("Status:", error.status);

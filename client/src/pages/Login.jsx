@@ -22,6 +22,7 @@ try {
     const {data} = await api.post(`/api/users/${state}`, formData)
     dispatch(login(data))
     localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
     toast.success(data.message)
 } catch (error) {
     console.log(error)

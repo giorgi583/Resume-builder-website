@@ -78,6 +78,7 @@ export const updateResume = async (req, res) => {
       const userId = req.userId;
       const {resumeId, resumeData, removeBackground} = req.body;
       const image = req.file
+      console.log('removeBackground:', removeBackground)
       let resumeDataCopy;
       if(typeof resumeData === 'string') {
         resumeDataCopy = await JSON.parse(resumeData);
@@ -92,12 +93,13 @@ const imageBufferData = fs.createReadStream(image.path);
   file: imageBufferData,
   fileName: 'resume.png',
   folder: 'user-resumes',
-  transformations: {
-    pre: 'w-300, h-300, fo-face, z-0.75' + (removeBackground ? ', bg-remove' : '')
+  transformation: {
+    pre: 'w-300,h-300,fo-face,z-0.75' + (removeBackground ? ',e-bgremove' : '')
   }
 });
 resumeDataCopy.personal_info.image = response.url;
       }
+      console.log(resumeDataCopy.personal_info.image)
       const resume = await Resume.findByIdAndUpdate({userId, _id: resumeId}, resumeDataCopy, {returnDocument: 'after'});
       if(!resume) {
         return res.status(404).json({ message: 'Resume not found' });

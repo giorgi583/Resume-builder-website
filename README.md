@@ -258,7 +258,6 @@ Users can:
 
 ## 🔮 Future Improvements
 
-- Additional resume templates
 - Resume analytics
 - Resume version history
 - Cover letter generation

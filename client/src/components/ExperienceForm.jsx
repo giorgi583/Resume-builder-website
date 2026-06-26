@@ -33,7 +33,8 @@ const [generatingIndex, setGeneratingIndex] = React.useState(-1)
         const prompt = `enhance this job description ${experience.description} for the position of ${experience.position} at ${experience.company}.`
         try {
             const {data} = await api.post(`/api/ai/enhance-job-desc`, {userContent: prompt}, {headers: {Authorization: token}})
-            updateExperience(index, 'description', data.enhancedContent)
+            console.log(data)
+            updateExperience(index, 'description', data.enhancedSummary)
         } catch (error) {
             toast.error(error?.response?.data?.message || error.message)
         }

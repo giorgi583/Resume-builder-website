@@ -1,5 +1,6 @@
 import React from 'react'
 import { BriefcaseBusiness, Globe, Mail, MapPin, Phone, User } from 'lucide-react'
+import { FaLinkedin } from 'react-icons/fa'
 const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground}) => {
     const fields = [
         {key : 'full_name', label: 'Full Name', icon: User, type: 'text', required: true},
@@ -7,8 +8,8 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
         {key : 'phone', label: 'Phone Number', icon: Phone, type: 'tel'},
         {key : 'location', label: 'Location', icon: MapPin, type: 'text'},
         {key : 'profession', label: 'Profession', icon: BriefcaseBusiness, type: 'text'},
-        {key : 'linkedin', label: 'LinkedIn Profile', icon: Globe, type: 'url'},
-        {key : 'website', label: 'Personal Website', icon: Globe, type: 'url'},
+        {key : 'linkedin', label: 'LinkedIn Profile', icon: FaLinkedin, type: 'url'},
+        {key : 'website', label: 'Personal Website', icon: Globe, type: 'url'}, 
     ]
 const handleChange = (field, value) => {
     onChange({...data, [field]: value});

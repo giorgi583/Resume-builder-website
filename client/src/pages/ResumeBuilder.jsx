@@ -99,7 +99,7 @@ const imageFile = updatedResumeData.personal_info.image
     formData.append('resumeId', resumeId)
     formData.append('resumeData', JSON.stringify(updatedResumeData))
     console.log(updatedResumeData)
-    removeBackground && formData.append('removeBackground', "yes")
+    removeBackground && formData.append('removeBackground', 'yes')
     if( typeof imageFile === 'object' && imageFile !== null)  formData.append('image', imageFile)
      const {data} = await api.put(`/api/resumes/update/`, formData, {headers: {Authorization: token}})
      setResumeData(data.resume)
